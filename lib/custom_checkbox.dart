@@ -16,16 +16,8 @@ class CustomCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: CheckboxPainter(fraction, color),
-      child: SizedBox(
-        width: 30,
-        height: 30,
-        child: Icon(
-          Icons.check,
-          size: checkSize,
-          color: Colors.white,
-        ),
-      ),
+      painter: CheckboxPainter(fraction, color, checkSize),
+      size: const Size(30, 30),
     );
   }
 }

@@ -45,7 +45,21 @@ class _CheckboxPageState extends State<CheckboxPage>
     blueCheckboxController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: sliderValue.floor()),
-    );
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.forward) {
+        greenCheckboxController.reverse();
+      }
+    });
+
+    greenCheckboxController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: sliderValue.floor()),
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.forward) {
+        blueCheckboxController.reverse();
+      }
+    });
+
     blueBackAnimation = _backTween.animate(CurvedAnimation(
       parent: blueCheckboxController,
       curve: const Interval(0, 0.5),
@@ -66,10 +80,6 @@ class _CheckboxPageState extends State<CheckboxPage>
         });
       });
 
-    greenCheckboxController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: sliderValue.floor()),
-    );
     greenBackAnimation = _backTween.animate(CurvedAnimation(
       parent: greenCheckboxController,
       curve: const Interval(0, 0.5),
@@ -96,17 +106,12 @@ class _CheckboxPageState extends State<CheckboxPage>
     if (type != selected) {
       if (type == CheckBoxType.blue) {
         blueCheckboxController.forward();
-        greenCheckboxController.reverse();
-        setState(() {
-          selected = type;
-        });
       } else {
         greenCheckboxController.forward();
-        blueCheckboxController.reverse();
-        setState(() {
-          selected = type;
-        });
       }
+      setState(() {
+        selected = type;
+      });
     }
   }
 
@@ -125,6 +130,7 @@ class _CheckboxPageState extends State<CheckboxPage>
   @override
   void dispose() {
     blueCheckboxController.dispose();
+    greenCheckboxController.dispose();
     super.dispose();
   }
 
